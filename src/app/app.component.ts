@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
-
+import { HttpClient } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError, retry } from 'rxjs/operators';
+import {Meme} from './meme';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -7,4 +10,13 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'p-meme';
+  public memes:Meme[]=[];
+
+  constructor(private http: HttpClient) { }
+
+  onSave():void{
+    this.http.get<any>("https://api.imgflip.com/get_memes").subscribe(response =>{
+this.memes=response.data.memes;
+    });
+  }
 }
